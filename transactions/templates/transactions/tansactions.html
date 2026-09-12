@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Transactions - FinSight</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            background: #1e293b;
+            padding: 18px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fb923c;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #fb923c;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            margin: 0 0 8px 0;
+        }
+
+        .header p {
+            margin: 0;
+            color: #94a3b8;
+        }
+
+        /* BUTTON */
+
+        .add-button {
+            background: #fb923c;
+            color: #0f172a;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .add-button:hover {
+            opacity: 0.9;
+        }
+
+        /* MESSAGES */
+
+        .message {
+            background: #334155;
+            padding: 14px 18px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            color: #4ade80;
+        }
+
+        /* TABLE CARD */
+
+        .table-card {
+            background: #1e293b;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            text-transform: uppercase;
+
+            padding: 15px;
+
+            border-bottom: 1px solid #334155;
+        }
+
+        td {
+            padding: 18px 15px;
+
+            border-bottom: 1px solid #334155;
+
+            color: #cbd5e1;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* TYPE */
+
+        .income {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .expense {
+            color: #f87171;
+            font-weight: bold;
+        }
+
+        /* CATEGORY */
+
+        .category {
+            background: #334155;
+
+            padding: 6px 10px;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+
+            display: inline-block;
+        }
+
+        /* AMOUNT */
+
+        .amount {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        /* DELETE */
+
+        .delete-button {
+            color: #f87171;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        .delete-button:hover {
+            text-decoration: underline;
+        }
+
+        /* EMPTY STATE */
+
+        .empty {
+            text-align: center;
+
+            padding: 60px 20px;
+        }
+
+        .empty h2 {
+            margin-bottom: 10px;
+        }
+
+        .empty p {
+            color: #94a3b8;
+
+            margin-bottom: 25px;
+        }
+
+        /* FOOTER LINK */
+
+        .back {
+            margin-top: 25px;
+        }
+
+        .back a {
+            color: #fb923c;
+
+            text-decoration: none;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .navbar {
+                padding: 18px 20px;
+            }
+
+            .container {
+                padding: 25px 15px;
+            }
+
+            .header {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 20px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- NAVBAR -->
+
+<div class="navbar">
+
+    <div class="logo">
+        FinSight
+    </div>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'budgets' %}">
+            Budgets
+        </a>
+
+        <a href="{% url 'logout' %}">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div>
+
+            <h1>
+                My Transactions
+            </h1>
+
+            <p>
+                View and manage your income and expenses.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'add_transaction' %}"
+            class="add-button"
+        >
+            + Add Transaction
+        </a>
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="message">
+
+                {{ message }}
+
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- TRANSACTION TABLE -->
+
+    <div class="table-card">
+
+
+        {% if transactions %}
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for transaction in transactions %}
+
+                        <tr>
+
+
+                            <!-- DATE -->
+
+                            <td>
+                                {{ transaction.date }}
+                            </td>
+
+
+                            <!-- TYPE -->
+
+                            <td>
+
+                                {% if transaction.transaction_type == 'income' %}
+
+                                    <span class="income">
+                                        ↑ Income
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="expense">
+                                        ↓ Expense
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- CATEGORY -->
+
+                            <td>
+
+                                <span class="category">
+                                    {{ transaction.category }}
+                                </span>
+
+                            </td>
+
+
+                            <!-- AMOUNT -->
+
+                            <td>
+
+                                {% if transaction.transaction_type == 'income' %}
+
+                                    <span class="amount income">
+                                        + ₹{{ transaction.amount }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="amount expense">
+                                        - ₹{{ transaction.amount }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- DESCRIPTION -->
+
+                            <td>
+
+                                {% if transaction.description %}
+
+                                    {{ transaction.description }}
+
+                                {% else %}
+
+                                    <span style="color:#64748b;">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <!-- ACTION -->
+
+                            <td>
+
+                                <a
+                                    href="{% url 'delete_transaction' transaction.id %}"
+                                    class="delete-button"
+                                >
+                                    Delete
+                                </a>
+
+                            </td>
+
+
+                        </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+
+        {% else %}
+
+
+            <!-- EMPTY STATE -->
+
+            <div class="empty">
+
+                <h2>
+                    No Transactions Yet
+                </h2>
+
+                <p>
+                    Start tracking your finances by adding your first transaction.
+                </p>
+
+                <a
+                    href="{% url 'add_transaction' %}"
+                    class="add-button"
+                >
+                    + Add Transaction
+                </a>
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <div class="back">
+
+        <a href="{% url 'dashboard' %}">
+            ← Back to Dashboard
+        </a>
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

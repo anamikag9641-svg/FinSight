@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FinSight Analytics</title>
+</head>
+
+<body>
+
+    <h1>Financial Analytics</h1>
+
+    <h2>Total Spending: ₹{{ total_spending }}</h2>
+
+    <h2>Average Expense: ₹{{ average_expense }}</h2>
+
+    <h2>Highest Expense: ₹{{ highest_expense }}</h2>
+
+    <h2>Number of Expenses: {{ expense_count }}</h2>
+
+    <h2>Category Spending</h2>
+
+    {% for item in category_data %}
+
+        <p>
+            {{ item.category__name }} :
+            ₹{{ item.total }}
+        </p>
+
+    {% empty %}
+
+        <p>No expenses found.</p>
+
+    {% endfor %}
+
+</body>
+</html>
