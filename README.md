@@ -6,6 +6,8 @@
 
 [View FinSight on GitHub](https://github.com/anamikag9641-svg/FinSight)
 
+http://127.0.0.1:8000/accounts/login/
+
 ## 📌 About the Project
 
 FinSight allows users to record and manage their financial transactions, create budgets, and analyze their spending through an interactive dashboard.
